@@ -1,33 +1,56 @@
 ---
 title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+description: 'Programmatic access to Jumper routing, transfers, and status'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
-
-## Welcome
-
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+The Jumper API gives you full control over cross-chain routing. Use it to fetch the best path, build the transaction payload, and monitor settlement with a single integration.
 
 <Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
+  title="OpenAPI specification"
+  icon="code"
+  href="/api-reference/openapi.json"
 >
-  View the OpenAPI specification file
+  Browse the full schema powering this reference.
 </Card>
+
+## Base URL
+
+```
+https://api.jumper.exchange
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+Send your API key with every request.
+
+```http
+x-api-key: YOUR_API_KEY
+```
+
+Use distinct keys per environment and rotate them regularly. Requests without a key are rate limited.
+
+## Core workflow
+
+1. **Quote:** call `/v1/quote` with source/destination chain, token, and amount.
+2. **Transfer:** pass the `routeId` to `/v1/transfer` to receive a transaction payload.
+3. **Broadcast:** send the transaction with your signer or relayer.
+4. **Track:** poll `/v1/status/{transferId}` or subscribe to the status webhook to keep users informed.
+
+## Rate limits
+
+- Quotes: optimized for real-time UX; cache identical requests where possible.
+- Transfers: signed requests are enforced; replay protection is applied to route IDs.
+- Status: prefer webhooks; poll with exponential backoff if webhooks are unavailable.
+
+## Errors
+
+Errors follow a consistent structure:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "error": "ROUTE_UNAVAILABLE",
+  "message": "No route found within your constraints"
+}
 ```
+
+Handle `429` by backing off and reusing cached quotes. For `400` errors, surface the message to users with remediation guidance (e.g., widen slippage or pick another bridge).

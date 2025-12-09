@@ -1,0 +1,6 @@
+---
+title: 'Get transfer status'
+openapi: 'GET /v1/status/{transferId}'
+---
+
+Check the latest state of a transfer using the `transferId` returned by `/v1/transfer`. Use this endpoint for backup polling when webhooks are unavailable, and backoff if the transfer is still pending.

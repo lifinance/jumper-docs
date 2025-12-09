@@ -1,54 +1,104 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "Jumper API",
+    "description": "Programmatic access to Jumper quotes, transfers, and status tracking.",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://api.jumper.exchange"
     }
   ],
   "security": [
     {
-      "bearerAuth": []
+      "ApiKeyAuth": []
     }
   ],
   "paths": {
-    "/plants": {
+    "/v1/quote": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "summary": "Get best cross-chain quote",
+        "description": "Returns the best route for the requested token amount across supported bridges and DEXs.",
         "parameters": [
           {
-            "name": "limit",
+            "name": "fromChainId",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "required": true,
+            "description": "EVM chain ID of the source chain.",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int64"
+            }
+          },
+          {
+            "name": "toChainId",
+            "in": "query",
+            "required": true,
+            "description": "EVM chain ID of the destination chain.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "fromTokenAddress",
+            "in": "query",
+            "required": true,
+            "description": "Token contract on the source chain. Use the native placeholder address for native assets.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toTokenAddress",
+            "in": "query",
+            "required": true,
+            "description": "Token contract on the destination chain. Use the native placeholder address for native assets.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromAmount",
+            "in": "query",
+            "required": true,
+            "description": "Amount to swap in the smallest unit (wei).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "slippage",
+            "in": "query",
+            "description": "Maximum allowed slippage (e.g., 0.005 for 0.5%).",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "integrator",
+            "in": "query",
+            "description": "Identifier for your integration to segment analytics and rate limits.",
+            "schema": {
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Quote response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
+                  "$ref": "#/components/schemas/QuoteResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Unexpected error",
+            "description": "Invalid input or unsupported route",
             "content": {
               "application/json": {
                 "schema": {
@@ -56,35 +106,9 @@
                 }
               }
             }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
           },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
+          "429": {
+            "description": "Rate limited",
             "content": {
               "application/json": {
                 "schema": {
@@ -96,28 +120,72 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/v1/transfer": {
+      "post": {
+        "summary": "Create transfer payload",
+        "description": "Returns the transaction data needed to execute the selected route.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transfer payload created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid route or request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/status/{transferId}": {
+      "get": {
+        "summary": "Get transfer status",
+        "description": "Returns the latest state of a transfer for tracking and user notifications.",
         "parameters": [
           {
-            "name": "id",
+            "name": "transferId",
             "in": "path",
-            "description": "ID of plant to delete",
             "required": true,
+            "description": "ID returned by the transfer endpoint.",
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "Status response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                }
+              }
+            }
           },
-          "400": {
-            "description": "unexpected error",
+          "404": {
+            "description": "Transfer not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -131,22 +199,23 @@
     }
   },
   "webhooks": {
-    "/plant/webhook": {
+    "/v1/webhooks/transfer-status": {
       "post": {
-        "description": "Information about a new plant added to the store",
+        "summary": "Transfer status webhook",
+        "description": "Receive asynchronous updates when a transfer state changes.",
         "requestBody": {
-          "description": "Plant added to the store",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/StatusResponse"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "Acknowledged"
           }
         }
       }
@@ -154,63 +223,197 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "Token": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
+          "chainId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "address": {
             "type": "string"
           },
-          "tag": {
-            "description": "Tag to specify the type",
+          "symbol": {
             "type": "string"
+          },
+          "decimals": {
+            "type": "integer"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "QuoteResponse": {
+        "type": "object",
+        "properties": {
+          "routeId": {
+            "type": "string",
+            "description": "Identifier to be used when creating the transfer."
           },
-          {
-            "required": [
-              "id"
-            ],
+          "fromAmount": {
+            "type": "string",
+            "description": "Input amount in smallest unit."
+          },
+          "toAmountMin": {
+            "type": "string",
+            "description": "Minimum output after slippage and fees."
+          },
+          "estimatedDuration": {
+            "type": "integer",
+            "description": "Estimated time to finality in seconds."
+          },
+          "bridge": {
+            "type": "string"
+          },
+          "exchange": {
+            "type": "string"
+          },
+          "gasUSD": {
+            "type": "number",
+            "format": "double",
+            "description": "Estimated gas cost in USD."
+          }
+        },
+        "required": [
+          "routeId",
+          "fromAmount",
+          "toAmountMin",
+          "estimatedDuration"
+        ]
+      },
+      "TransferRequest": {
+        "type": "object",
+        "required": [
+          "routeId",
+          "userAddress"
+        ],
+        "properties": {
+          "routeId": {
+            "type": "string",
+            "description": "Route identifier from the quote response."
+          },
+          "userAddress": {
+            "type": "string",
+            "description": "Sender address that will sign and broadcast the transaction."
+          },
+          "integrator": {
+            "type": "string",
+            "description": "Optional tag for analytics and fee attribution."
+          },
+          "slippage": {
+            "type": "number",
+            "format": "double",
+            "description": "Override slippage for this transfer."
+          }
+        }
+      },
+      "TransferResponse": {
+        "type": "object",
+        "properties": {
+          "transferId": {
+            "type": "string",
+            "description": "Identifier to use when checking status."
+          },
+          "transaction": {
             "type": "object",
             "properties": {
-              "id": {
-                "description": "Identification number of the plant",
+              "to": {
+                "type": "string"
+              },
+              "data": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "chainId": {
                 "type": "integer",
                 "format": "int64"
+              },
+              "gasLimit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "to",
+              "data",
+              "value",
+              "chainId"
+            ]
+          },
+          "approvals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "$ref": "#/components/schemas/Token"
+                },
+                "spender": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string"
+                }
               }
             }
           }
+        },
+        "required": [
+          "transferId",
+          "transaction"
+        ]
+      },
+      "StatusResponse": {
+        "type": "object",
+        "properties": {
+          "transferId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "in_progress",
+              "completed",
+              "failed"
+            ]
+          },
+          "txHash": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "toAmount": {
+            "type": "string",
+            "description": "Final amount delivered in the smallest unit."
+          }
+        },
+        "required": [
+          "transferId",
+          "status"
         ]
       },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
         "type": "object",
         "properties": {
           "error": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string"
           },
           "message": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "error",
+          "message"
+        ]
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
       }
     }
   }

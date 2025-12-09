@@ -1,94 +1,99 @@
 ---
-title: 'Development'
-description: 'Preview changes locally to update your docs'
+title: 'Embed the Jumper widget'
+description: 'Add the drop-in cross-chain experience to your app'
 ---
 
+The Jumper widget wraps routing, approvals, gas estimation, and status tracking into a single UI component. Use it to launch production-ready bridging and swapping without rebuilding core flows.
+
 <Info>
-  **Prerequisites**:
-  - Node.js version 19 or higher
-  - A docs repository with a `docs.json` file
+  **Prerequisites**
+  - Node.js 18+
+  - React 18 or Next.js 13+ (App Router or Pages)
+  - An API key for production traffic
 </Info>
 
-Follow these steps to install and run Mintlify on your operating system.
-
-<Steps>
-<Step title="Install the Mintlify CLI">
+## Install
 
 ```bash
-npm i -g mint
-```
-</Step>
-
-<Step title="Preview locally">
-
-Navigate to your docs directory where your `docs.json` file is located, and run the following command:
-
-```bash
-mint dev
+npm install @lifi/widget
 ```
 
-A local preview of your documentation will be available at `http://localhost:3000`.
+## Add the widget
 
-</Step>
-</Steps>
+```tsx
+'use client';
+import { LiFiWidget } from '@lifi/widget';
 
-## Custom ports
+const theme = {
+  primary: '#6D28D9',
+  secondary: '#1E0F3F',
+  borderRadius: 16
+};
 
-By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. For example, to run Mintlify on port 3333, use this command:
-
-```bash
-mint dev --port 3333
+export function JumperWidget() {
+  return (
+    <div className="h-[720px] w-full max-w-3xl">
+      <LiFiWidget
+        integrator="jumper-docs"
+        variant="expandable"
+        appearance={theme}
+        config={{
+          disableTelemetry: false,
+          bridges: { allow: ['hop', 'stargate', 'celer'] },
+          exchanges: { allow: ['uniswap', '1inch', 'paraswap'] },
+          insurance: true
+        }}
+      />
+    </div>
+  );
+}
 ```
 
-If you attempt to run Mintlify on a port that's already in use, it will use the next available port:
+<Tip>Wrap the widget in a parent with a fixed height. The component is fully responsive inside that container.</Tip>
 
-```md
-Port 3000 is already in use. Trying 3001 instead.
+## Configure tokens and chains
+
+Use the config props to restrict assets and networks for your business logic.
+
+```tsx
+<LiFiWidget
+  integrator="jumper-docs"
+  config={{
+    fromChain: 1,
+    toChain: 137,
+    fromToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    toToken: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+    slippage: 0.005,
+    fee: {
+      integrator: 'jumper-docs',
+      fee: 0.0015,
+      feeRecipient: '0x0000000000000000000000000000000000000000'
+    }
+  }}
+/>
 ```
 
-## Mintlify versions
+- **Chain controls:** allow/deny lists for bridges and exchanges.
+- **Fees:** set an integrator fee and destination address.
+- **Appearance:** primary/secondary colors, radius, shadows, and font family.
 
-Please note that each CLI release is associated with a specific version of Mintlify. If your local preview does not align with the production version, please update the CLI:
+## Events and callbacks
 
-```bash
-npm mint update
+Listen to lifecycle events to keep your UI in sync.
+
+```tsx
+<LiFiWidget
+  onRouteExecutionStarted={route => console.log('Executing', route.id)}
+  onRouteExecutionFailed={(route, error) => console.error(route.id, error)}
+  onRouteExecutionCompleted={route => console.log('Completed', route.id)}
+/>
 ```
 
-## Validating links
+Use these callbacks to fire analytics, notify your backend, or update in-app notifications.
 
-The CLI can assist with validating links in your documentation. To identify any broken links, use the following command:
+## Deploying to production
 
-```bash
-mint broken-links
-```
-
-## Deployment
-
-If the deployment is successful, you should see the following:
-
-<Frame>
-  <img src="/images/checks-passed.png" alt="Screenshot of a deployment confirmation message that says All checks have passed." style={{ borderRadius: '0.5rem' }} />
-</Frame>
-
-## Code formatting
-
-We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
-
-## Troubleshooting
-
-<AccordionGroup>
-  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
-
-    This may be due to an outdated version of node. Try the following:
-    1. Remove the currently-installed version of the CLI: `npm remove -g mint`
-    2. Upgrade to Node v19 or higher.
-    3. Reinstall the CLI: `npm i -g mint`
-  </Accordion>
-
-  <Accordion title="Issue: Encountering an unknown error">
-  
-    Solution: Go to the root of your device and delete the `~/.mintlify` folder. Then run `mint dev` again.
-  </Accordion>
-</AccordionGroup>
-
-Curious about what changed in the latest CLI version? Check out the [CLI changelog](https://www.npmjs.com/package/mintlify?activeTab=versions).
+- Provide your `x-api-key` for production traffic.
+- Cache token metadata and chain lists to reduce cold-start latency.
+- Surface route warnings (paused bridge, low liquidity) before users confirm.
+- Subscribe to webhooks or poll `/v1/status/{transferId}` to keep users informed if they close the tab.

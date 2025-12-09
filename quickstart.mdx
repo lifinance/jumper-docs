@@ -1,80 +1,78 @@
 ---
 title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+description: "Launch cross-chain swaps and bridging with Jumper"
 ---
 
-## Get started in three steps
+Get Jumper running in minutes. Pick the integration mode, drop in the widget or call the API, and ship a reliable cross-chain experience.
 
-Get your documentation site running locally and make your first customization.
-
-### Step 1: Set up your local environment
+## Step 1: Choose your integration
 
 <AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
+  <Accordion icon="window-maximize" title="Widget (fastest)">
+    Drop-in UI that handles routing, gas, approvals, and user flows. Recommended if you want a production-ready experience with minimal effort.
   </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
+  <Accordion icon="code" title="API (full control)">
+    Use the HTTP API to fetch quotes, build transactions, and manage settlement yourself. Recommended for custom UI or server-side flows.
   </Accordion>
 </AccordionGroup>
 
-### Step 2: Deploy your changes
+## Step 2: Add the widget
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+Install the Jumper widget and render it inside your app.
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+```bash
+npm install @lifi/widget react react-dom
+```
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+```tsx
+'use client';
+import { LiFiWidget } from '@lifi/widget';
 
-### Step 3: Go live
+export function JumperWidget() {
+  return (
+    <div className="h-[720px] w-full max-w-3xl rounded-2xl border border-purple-200/50 shadow-lg">
+      <LiFiWidget
+        integrator="jumper-docs"
+        variant="wide"
+        appearance={{
+          primary: '#6D28D9',
+          secondary: '#1E0F3F'
+        }}
+      />
+    </div>
+  );
+}
+```
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+<Tip>Wrap the widget in a responsive container so it scales across mobile and desktop.</Tip>
 
-## Next steps
+## Step 3: Call the API
 
-Now that you have your docs running, explore these key features:
+Use the API when you need to pre-validate routes, run compliance checks, or render your own UI.
 
-<CardGroup cols={2}>
+```ts
+async function getQuote() {
+  const response = await fetch('https://api.jumper.exchange/v1/quote?fromChainId=1&toChainId=137&fromTokenAddress=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&toTokenAddress=0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619&fromAmount=1000000000000000000&slippage=0.005', {
+    headers: { 'x-api-key': process.env.NEXT_PUBLIC_JUMPER_API_KEY ?? '' }
+  });
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+  if (!response.ok) throw new Error('Failed to fetch quote');
+  return response.json();
+}
+```
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+With a route in hand, submit the transaction payload returned by `/v1/transfer` using your signer or server-side relayer.
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+## Optimize for production
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+- **Add monitoring:** Track success, reverts, and bridge/DEX status. Subscribe to the status webhook or poll `/v1/status/{transferId}`.
+- **Control risk:** Set max slippage per chain, enforce allowlists/denylists, and cap daily volume.
+- **Handle approvals:** The widget manages approvals automatically. For custom UIs, request approvals before broadcasting the transfer transaction.
+- **Surface fees:** Show gas estimates and protocol fees from the quote to avoid user surprise.
 
-</CardGroup>
+## Security and compliance
 
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>
+- Use your own `integrator` tag to segment traffic and manage rate limits.
+- Keep API keys in server-side environments or protected client env vars.
+- Validate destination addresses and amount bounds before sending the transaction payload to the chain.
+- Monitor [`status.li.fi`](https://status.li.fi) for bridge or DEX incidents.

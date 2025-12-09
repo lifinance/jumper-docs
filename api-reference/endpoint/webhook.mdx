@@ -1,4 +1,6 @@
 ---
-title: 'New Plant'
-openapi: 'WEBHOOK /plant/webhook'
+title: 'Transfer status webhook'
+openapi: 'WEBHOOK /v1/webhooks/transfer-status'
 ---
+
+Receive push updates when a transfer changes state. Webhooks are retried with exponential backoff; respond with `200` to acknowledge receipt. Validate the signature header before processing.

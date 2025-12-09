@@ -1,0 +1,6 @@
+---
+title: 'Create transfer'
+openapi: 'POST /v1/transfer'
+---
+
+Build the transaction payload for the selected route. Use the `routeId` returned from `/v1/quote` to avoid replay attacks. The response includes calldata, gas estimates, and required approvals.
