@@ -1,6 +1,6 @@
 # Jumper Docs
 
-Documentation for integrating Jumper's cross-chain liquidity router. Built with [Mintlify](https://mintlify.com/) for fast iteration and deployment.
+Documentation for Jumper's cross-chain experience. Built with [Mintlify](https://mintlify.com/) for fast iteration and deployment.
 
 ## Local preview
 
@@ -16,7 +16,6 @@ Then open `http://localhost:3000`.
 ## Structure
 
 - Guides (`index.mdx`, `quickstart.mdx`, `development.mdx`)
-- API reference powered by `api-reference/openapi.json`
 - Brand assets in `logo/` and `favicon.svg`
 
 ## Deployment

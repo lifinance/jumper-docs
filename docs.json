@@ -25,22 +25,8 @@
             "group": "Product guide",
             "pages": [
               "using-jumper",
+              "jumper-2-0",
               "faq"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "Endpoints",
-            "pages": [
-              "api-reference/introduction",
-              "api-reference/endpoint/quote",
-              "api-reference/endpoint/transfer",
-              "api-reference/endpoint/status",
-              "api-reference/endpoint/webhook"
             ]
           }
         ]
