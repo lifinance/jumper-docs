@@ -1,0 +1,72 @@
+---
+title: Jumper Swap
+description: Same-chain and cross-chain token swapping product
+icon: display
+---
+
+## What is Jumper Swap?
+
+**Jumper Swap is Jumper Exchange's same-chain and cross-chain token swapping product.**
+
+It allows users to swap tokens across different blockchains using a single interface that automatically selects the best available route across liquidity and infrastructure providers.
+
+Jumper Swap does not custody user funds.
+
+<Note>
+Jumper Swap simplifies token swapping across chains by abstracting bridge and liquidity complexity into one execution flow.
+</Note>
+
+---
+
+## The Swap Problem We Solve
+
+Users traditionally must manually choose:
+
+- Bridges
+- DEXs
+- Destination tokens
+- Slippage parameters
+
+Jumper Swap removes this decision burden by surfacing all the routes to users.
+
+---
+
+## How Jumper Swap Works
+
+1. User selects source token and destination token.
+2. Jumper computes the optimal route across liquidity and bridge providers.
+3. User reviews the quote and confirms in their wallet.
+4. Funds arrive on the destination chain as the selected token.
+
+---
+
+## Is Jumper Swap a bridge?
+
+No. Jumper Swap is an aggregation and routing interface. It may use multiple underlying bridge and liquidity providers to execute a swap.
+
+---
+
+## Key features
+
+- Gasless transactions
+- Supports Interop Token Standards tokens
+- One-click swaps
+- Route aggregation
+- Slippage controls
+- Gas estimation
+- Quote transparency
+
+---
+
+## Relationship to other Jumper products
+
+Jumper Swap enables capital movement into Jumper Earn and updates balances in Jumper Portfolio.
+
+<CardGroup cols={2}>
+  <Card title="Crosschain Swaps" icon="bridge" href="/products/jumper-swap/crosschain-swaps">
+    Learn about crosschain swap capabilities
+  </Card>
+  <Card title="MetaDex Aggregator" icon="rotate" href="/products/jumper-swap/metadex-aggregator">
+    Learn about same-chain swap optimization
+  </Card>
+</CardGroup>

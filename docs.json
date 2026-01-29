@@ -14,7 +14,7 @@
         "tab": "Guides",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
               "index",
               "quickstart",
@@ -22,11 +22,87 @@
             ]
           },
           {
-            "group": "Product guide",
+            "group": "Product Guide",
             "pages": [
               "using-jumper",
               "jumper-2-0",
               "faq"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Products",
+        "groups": [
+          {
+            "group": "Jumper Swap",
+            "pages": [
+              "products/jumper-swap/overview",
+              "products/jumper-swap/crosschain-swaps",
+              "products/jumper-swap/metadex-aggregator"
+            ]
+          },
+          {
+            "group": "Jumper Earn",
+            "pages": [
+              "products/jumper-earn"
+            ]
+          },
+          {
+            "group": "Jumper Portfolio",
+            "pages": [
+              "products/jumper-portfolio"
+            ]
+          },
+          {
+            "group": "Jumper Pass",
+            "pages": [
+              "products/jumper-pass/overview",
+              "products/jumper-pass/perks",
+              "products/jumper-pass/missions",
+              "products/jumper-pass/games"
+            ]
+          },
+          {
+            "group": "Jumper Scan",
+            "pages": [
+              "products/jumper-scan"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Resources",
+        "groups": [
+          {
+            "group": "Analytics & Learning",
+            "pages": [
+              "resources/analytics",
+              "resources/jumper-learn"
+            ]
+          },
+          {
+            "group": "Infrastructure",
+            "pages": [
+              "resources/supported-chains",
+              "resources/bitcoin-providers",
+              "resources/solana-providers",
+              "resources/evm-providers"
+            ]
+          },
+          {
+            "group": "Security",
+            "pages": [
+              "resources/audits",
+              "resources/smart-contracts"
+            ]
+          },
+          {
+            "group": "Community",
+            "pages": [
+              "resources/official-links",
+              "resources/brand-assets",
+              "resources/faq"
             ]
           }
         ]
@@ -56,10 +132,6 @@
       {
         "label": "Support",
         "href": "mailto:support@jumper.exchange"
-      },
-      {
-        "label": "Developers",
-        "href": "https://jumper.exchange"
       }
     ],
     "primary": {
@@ -82,9 +154,10 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/jumper_exchange",
-      "github": "https://github.com/lifinance",
-      "linkedin": "https://www.linkedin.com/company/lifi/"
-    }
+      "x": "https://x.com/jumperexchange",
+      "github": "https://github.com/jumperexchange",
+      "discord": "https://discord.gg/jumperexchange"
+    },
+    "poweredByMintlify": false
   }
 }

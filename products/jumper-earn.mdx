@@ -1,0 +1,165 @@
+---
+title: Jumper Earn
+description: Yield Aggregation Layer on Jumper
+icon: flower-tulip
+---
+
+**Jumper Earn** is a personalized DeFi yield layer that aggregates 600+ earning opportunities (vaults, lending pools, staking pools etc) across various DeFi protocols.
+
+Earn helps users discover, evaluate, and deploy capital into DeFi earning opportunities across multiple chains and protocols from a single interface.
+
+Jumper Earn does not custody user funds and does not guarantee returns.
+
+<Note>
+Jumper Earn enables personalised discovery of DeFi earning opportunities and allows users to deploy capital directly without leaving Jumper.
+</Note>
+
+<Frame>
+  <img src="/images/image (2) (1).png" alt="Jumper Earn interface" />
+</Frame>
+
+---
+
+## The tech Powering Jumper Earn
+
+### The Discovery Engine
+
+**Jumper Earn** features 6**00+ opportunities on 10+ chains** enough to overwhelm even seasoned users. That is why we have a way to help you focus on the best opportunities.
+
+Each time a user visits Jumper Earn, we:
+
+- **Scan their portfolio** to detect idle assets and current DeFi positions
+- **Analyze** these positions alongside **live market data**
+- **Score** each opportunity based on how relevant and advantageous it is for that specific user
+
+This scoring mechanism allows us to **handpick personalized recommendations** i.e. the ones that truly fit the user's risk profile, liquidity preferences, and yield potential.
+
+**Example:**
+
+A user holds **ETH on Base** and an **USDC vault position on Euler (Arbitrum)**.
+
+We'd assign:
+
+- ✅ A **bonus** to low-risk opportunities (large money market pools, conservative strategies)
+- ✅ A **bonus** to opportunities on liquid chains (Arbitrum, Base, Ethereum)
+- ✅ A **bonus** to opportunities tied to ETH or USDC
+- ✅ A **bonus** to opportunities offering higher realized APR than the user's current vault
+- ✅ A **bonus** to opportunities with active reward campaigns
+
+---
+
+## How are opportunities scored?
+
+Each opportunity receives a relevance score based on multiple factors, including:
+
+- Risk profile alignment
+- Chain liquidity
+- Asset compatibility
+- Relative yield performance
+- Reward incentives
+
+### Example scoring logic
+
+If a user holds:
+
+- ETH on Base
+- USDC in an Euler vault on Arbitrum
+
+The system may assign bonuses to:
+
+- Low-risk strategies such as large money-market pools
+- Opportunities on liquid chains (Arbitrum, Base, Ethereum)
+- Opportunities denominated in ETH or USDC
+- Opportunities offering higher realised APR than the current vault
+- Opportunities with active reward campaigns
+
+The highest-scoring opportunities appear as featured recommendations or display a special **handpicked** indicator.
+
+---
+
+## What is Advanced Search in Jumper Earn?
+
+Beyond personalised discovery, Jumper Earn includes a **modular advanced search engine**.
+
+This allows users to explore DeFi opportunities manually and precisely.
+
+Users can filter and sort opportunities by:
+
+- Underlying asset
+- Blockchain
+- Protocol category (e.g. money market, yield aggregator, LSD)
+- Protocol name
+- 30-day APR
+- Total Value Locked (TVL)
+
+<Note>
+Advanced Search enables structured, manual discovery of DeFi yield opportunities.
+</Note>
+
+---
+
+## How is Jumper Earn different from yield dashboards?
+
+Unlike traditional dashboards, Jumper Earn allows users to:
+
+- Discover opportunities
+- Compare opportunities
+- Deploy capital
+
+all from the same interface.
+
+There is no need to open external protocols, manage multiple approvals, or switch applications.
+
+---
+
+## What is the One-Click Deposit experience?
+
+**The One-Click Deposit is Jumper Earn's cross-chain, single-transaction investment flow.**
+
+It allows users to deposit into a vault:
+
+- From any token
+- From any chain
+- With any wallet (EOA or smart wallet)
+- In one click
+- Without paying gas directly
+
+## How does the One-Click Zap work?
+
+The flow is powered by:
+
+- LI.FI's Composer & cross-chain routing
+
+### Execution process
+
+1. Funds move from the user's wallet into a dedicated smart wallet (one per user).
+2. All swap, bridge, and deposit steps are batched into a single calldata instruction.
+3. The smart wallet executes the transaction.
+4. The resulting vault tokens are sent back to the user's wallet automatically.
+
+The user experiences this as a single seamless action.
+
+---
+
+## Does Jumper Earn custody user funds?
+
+No.
+
+Jumper Earn does not custody user funds. Users always retain ownership through their wallets.
+
+---
+
+## Relationship to other Jumper products
+
+**Jumper Earn receives capital from:**
+
+- Same-chain swaps
+- Cross-chain swaps
+
+**Positions created in Jumper Earn are tracked in:**
+
+- Jumper Portfolio
+
+<Info>
+Feel free to give us your feedback [here](https://discord.gg/jumperexchange)
+</Info>
