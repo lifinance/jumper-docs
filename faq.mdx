@@ -1,58 +1,101 @@
 ---
-title: "FAQ and glossary"
+title: "Jumper FAQ and glossary"
 description: "Answers to common questions plus key Jumper terms"
 ---
 
-## FAQ
+## **Frequently asked questions**
 
-### What is Jumper?
+**Answers to common questions and key Jumper terms**
 
-Jumper is a consumer exchange that lets you swap and bridge across many chains from one interface.
+<AccordionGroup>
+  <Accordion title="What is Jumper?">
+    Jumper is a complete DeFi platform that finds you the most optimal route across DEXs, bridges, and DeFi protocols to move or deposit your assets anywhere onchain. You can swap, bridge, earn yield, and track your portfolio from one interface. To get started, just connect your wallet.
+  </Accordion>
 
-### Do I need an account?
+  <Accordion title="Is Jumper a bridge?">
+    No. Jumper is an aggregation and routing interface. It uses multiple underlying bridges, DEXs, and DeFi protocols to execute your transaction. Jumper does not custody funds.
+  </Accordion>
 
-No account required. Connect a wallet. Some fiat on-ramp providers may require identity checks.
+  <Accordion title="Is Jumper powered by LI.FI?">
+    Yes. Jumper uses [LI.FI](http://LI.FI) infrastructure for cross-chain routing and execution. You don't need to understand [LI.FI](http://LI.FI) to use Jumper.
+  </Accordion>
 
-### Which chains and tokens are supported?
+  <Accordion title="Which chains and tokens are supported?">
+    Jumper supports 65\+ blockchains, including EVM chains, Solana, Bitcoin, Sui, Monad, and Hyperliquid. The available tokens depend on the chains you select. See Supported Chains for the full list.
+  </Accordion>
 
-Support changes over time. Jumper shows what is currently available for the selected chains.
+  <Accordion title="Do I need an account?">
+    No. You can connect any supported wallet to start using Jumper. 
+  </Accordion>
 
-### Why do I need to approve a token?
+  <Accordion title="Why do I need to approve a token?">
+    ERC-20 tokens require a separate approval transaction before a smart contract can spend them. This is a standard blockchain pattern, not unique to Jumper. Prefer limited approvals when your wallet supports it.
+  </Accordion>
 
-Approvals let a contract spend a token for swapping. Many ERC20 tokens require approval before swapping.
+  <Accordion title="Can I cancel a transaction?">
+    Once submitted to the blockchain, transactions generally cannot be cancelled. Some wallets allow you to replace a pending transaction by sending a new one with higher gas (same nonce).
+  </Accordion>
 
-### Can I cancel a transaction?
+  <Accordion title="How long does a bridge take?">
+    Depends on the route and network conditions. Some routes complete in seconds; others take longer during congestion or when extra verification is required.
+  </Accordion>
 
-Once submitted, you generally cannot cancel. Some wallets let you replace a pending transaction with a higher-gas one.
+  <Accordion title="What is Gas Top Up?">
+    Gas Top Up adds a small amount of the native gas token on the destination chain so you can transact immediately after bridging. Useful when you land on a new chain with zero gas.
+  </Accordion>
 
-### How long does a bridge take?
+  <Accordion title="Are there transaction limits?">
+    It depends on the underlying provider. Some providers may have minimum or maximum amounts. Jumper shows you the best possible routes for any amount and asset you choose.
+  </Accordion>
+</AccordionGroup>
 
-Depends on route and network conditions. Some complete quickly; others take longer during congestion.
+---
 
-### What is Gas Top Up?
+## **Troubleshooting**
 
-It adds a small amount of the native gas token on the destination chain so you can transact after bridging.
+**Quick fixes in case you face issues with your transactions.**
 
-### Why did my transaction fail?
+<AccordionGroup>
+  <Accordion title="My transaction is stuck pending">
+    Check the transaction in your wallet. Open the explorer link to confirm it's still pending. If gas is too low, try speeding up the transaction in your wallet.
+  </Accordion>
 
-Common reasons: not enough gas, slippage too low, route liquidity changed, or temporary provider issues. Try a smaller amount or a different token pair.
+  <Accordion title="My bridge is taking too long">
+    Network congestion or extra verification can slow bridges. Keep the tracking page open. Avoid submitting a duplicate transfer unless the UI shows the original as failed. If you want the fastest routes, you can switch to “Fastest” from “Best Rate” in your Jumper swap settings.
+  </Accordion>
 
-### Are there limits?
+  <Accordion title="Token not found">
+    The token may not exist on the chain you selected. Switch to the correct chain or pick another token.
+  </Accordion>
 
-Some providers have minimums/maximums. Fiat on-ramps may enforce limits by region and verification level.
+  <Accordion title="I bridged but can't transact on the destination chain">
+    You likely have no gas on the destination chain. Use Gas Top Up or receive a small native token amount from another chain or wallet.
+  </Accordion>
 
-### Is Jumper powered by LI.FI?
+  <Accordion title="Output changed after I confirmed">
+    Price movement between your quote and execution can change the output. Try a smaller amount, a different pair, or adjust your slippage tolerance.
+  </Accordion>
 
-Jumper uses LI.FI infrastructure for routing and execution. You do not need to understand LI.FI to use Jumper.
+  <Accordion title="I don't see my tokens after bridging">
+    Confirm the transaction status is completed. Switch to the destination chain in your wallet. Some wallets may not show new tokens by default. In such case, add the token contract to the wallet you’re using.
+  </Accordion>
+</AccordionGroup>
 
-## Glossary
+### Need Help?
 
-- **Chain:** A blockchain network such as Ethereum, Arbitrum, Base, or Solana.
-- **Token:** A crypto asset such as ETH, USDC, or DAI.
-- **Swap:** Trading one token for another on the same chain.
-- **Bridge:** Moving value from one chain to another.
-- **Route:** The set of steps used to complete your swap or bridge.
-- **Gas:** The network fee required to submit a transaction.
-- **Slippage:** Allowed price movement between estimate and final execution.
-- **Explorer:** A site that shows onchain transaction details.
+For the fastest support, go to [support.jumper.xyz](https://support.jumper.xyz) and share: transaction hash, From/To chains, token pair and amount, and a screenshot of the route review screen. 
 
+---
+
+## **Glossary**
+
+1. **Bridge:** Moving value from one blockchain to another.
+2. **Chain:** A blockchain network (e.g., Ethereum, Arbitrum, Base, Solana).
+3. **Explorer:** A website that shows onchain transaction details (e.g., Etherscan).
+4. **Gas:** The network fee required to submit a transaction. Paid in the chain's native token.
+5. **Gas Top Up:** A Jumper feature that adds a small native gas amount on the destination chain.
+6. **Route:** The set of steps Jumper plans to complete your swap or bridge. May include one or more transactions.
+7. **Slippage:** The allowed difference between the estimated output and the final execution price. Lower slippage = more price protection but higher failure rate. Higher slippage = better fill rate but potentially worse price.
+8. **Swap:** Trading one token for another on the same chain.
+9. **Token:** A crypto asset on a blockchain (e.g., ETH, USDC, DAI).
+10. **Zap:** A one-click flow that bridges, swaps, and deposits into a yield position in a single transaction.

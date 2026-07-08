@@ -1,39 +1,47 @@
 ---
 title: "Quickstart"
-description: "Swap, bridge, earn points, and tap perks with Jumper"
+description: "Get up to speed with using all Jumper features in just a few minutes"
 ---
 
-Jumper is a B2C app for swapping, bridging, earning yield, and collecting perks—no APIs or developer setup required.
+Connect a wallet, swap or bridge tokens, and start earning in no time with Jumper. 
 
 ## Step 1: Connect your wallet
 
-- Open Jumper and select **Connect wallet**.
-- Choose your provider (e.g., MetaMask, Rabby, Coinbase Wallet, WalletConnect).
+- Open [<u>jumper.xyz</u>](http://jumper.xyz) and click Connect wallet.
+- Choose your wallet provider (MetaMask, Rabby, Coinbase Wallet, WalletConnect, etc.).
 - Approve the connection in your wallet.
 
 ## Step 2: Pick what you want to do
 
 <AccordionGroup>
-  <Accordion icon="shuffle" title="Swap (same chain)">
-    Select From chain/token, To token, enter an amount, review the estimate, then confirm. Some tokens need an approval first.
+  <Accordion title="Swap (same chain)" icon="shuffle">
+    Go to [<u>jumper.xyz</u>](http://jumper.xyz) and select the assets you want to swap, enter the amount, review the quotes, select your preferred rate. If you’re swapping a token for the first time, it may need an approval transaction.
   </Accordion>
-  <Accordion icon="arrow-right-arrow-left" title="Bridge (cross-chain)">
-    Select From chain/token and To chain/token, review output, time, and fees, then confirm and track progress.
+
+  <Accordion title="Bridge (cross-chain)" icon="arrow-right-arrow-left">
+    Select your assets for source and destination chains. Enter the amount you want to move and review the quotes, estimated time, and fees. 
   </Accordion>
-  <Accordion icon="sparkles" title="Earn and perks">
-    Visit Jumper 2.0 to see personalized yield options and perks tied to your Jumper Pass tier.
+
+  <Accordion title="Swap + Bridge combined" icon="arrow-progress">
+    This is the most common Jumper flow. Example: start with USDC on Arbitrum and receive ETH on Base. Jumper handles the swap and bridge as one transaction.
   </Accordion>
-  <Accordion icon="trophy" title="Missions">
-    Complete missions to earn points and unlock additional benefits. Check the missions panel for active tasks.
+
+  <Accordion title="Private Swap" icon="eye-slash">
+    Go to [jumper.xyz/private](https://jumper.xyz/private) and select the asset you want to swap, your destination chain, asset, and wallet address. 
   </Accordion>
-  <Accordion icon="fuel-pump" title="Gas Top Up">
-    If you arrive on a new chain with no native gas, top up a small amount so you can act immediately.
+
+  <Accordion title="Earn" icon="money-bill-trend-up">
+    Click on Earn to go to [jumper.xyz/earn](https://jumper.xyz/earn). Select a personalized earning opportunity or choose one under the "All Markets" tab. Choose the asset and chain you want to deposit from.
+  </Accordion>
+
+  <Accordion title="Gas Top Up" icon="gas-pump">
+    If you're moving to a new chain and need the gas token, go to [jumper.xyz/gas](https://jumper.xyz/gas) and select any token on any supported chain to get gas.
   </Accordion>
 </AccordionGroup>
 
 ## Step 3: Review and confirm
 
-- Check route details, estimated output, expected time, and known fees.
+- Check route details, estimated output, expected time, and quoted fees.
 - Keep the slippage setting appropriate: tighter for price protection, wider for higher fill probability.
 - Confirm in your wallet. Stay on the tracking screen for multi-step routes.
 
@@ -41,10 +49,3 @@ Jumper is a B2C app for swapping, bridging, earning yield, and collecting perks�
 
 - Watch the in-app tracker for pending, bridging, and completed states.
 - If pending, check your wallet activity or the block explorer.
-
-## Tips for smooth usage
-
-- **Approvals:** Some tokens require a one-time approval. Approve only what's needed when possible.
-- **Gas:** You pay gas on the chain where you sign. Multi-step routes can need gas for more than one transaction.
-- **Safety:** Double check From/To chains and tokens; bookmark the official Jumper domain; start with small tests on new chains.
-- **Stay updated:** Check `https://status.li.fi` if routes look slow or paused.

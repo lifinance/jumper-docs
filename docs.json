@@ -17,14 +17,13 @@
             "group": "Getting Started",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "quickstart"
             ]
           },
           {
             "group": "Product Guide",
             "pages": [
-              "using-jumper",
+              "development",
               "jumper-2-0",
               "faq"
             ]
@@ -37,7 +36,7 @@
           {
             "group": "Jumper Swap",
             "pages": [
-              "products/jumper-swap/overview",
+              "products/swap-bridge/overview",
               "products/jumper-swap/crosschain-swaps",
               "products/jumper-swap/metadex-aggregator"
             ]
@@ -51,7 +50,8 @@
           {
             "group": "Jumper Portfolio",
             "pages": [
-              "products/jumper-portfolio"
+              "products/jumper-portfolio",
+              "products/untitled-page"
             ]
           },
           {
@@ -100,9 +100,9 @@
           {
             "group": "Community",
             "pages": [
+              "resources/faq",
               "resources/official-links",
-              "resources/brand-assets",
-              "resources/faq"
+              "resources/brand-assets"
             ]
           }
         ]
