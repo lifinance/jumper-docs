@@ -37,6 +37,7 @@
             "group": "Jumper Swap",
             "pages": [
               "products/swap-bridge/overview",
+              "products/jumper-swap/private-swap",
               "products/jumper-swap/crosschain-swaps",
               "products/jumper-swap/metadex-aggregator"
             ]
