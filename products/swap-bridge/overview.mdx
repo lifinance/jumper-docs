@@ -78,33 +78,27 @@ Landing on a new chain with no native gas? Gas Top Up adds a small amount of the
 
 The review screen shows all costs alongside the estimated output, time, known fees, and expected gas before you confirm.
 
-## Jumper fees
+## Jumper Fees
 
-Jumper charges a small fee on standard swaps and bridges. The fee depends on the type of assets involved in the transaction.
+Jumper charges a small fee on standard swaps and bridges. The fee depends on the type of assets involved.
 
-Fees are measured in **basis points (bps)**.<br />**1 bp = 0.01%.**
+### Swap
 
-| Transaction | Stable | Major | Other |
-| --- | --: | --: | --: |
-| **Swap** | 0 bps | 2 bps | 5 bps |
-| **Bridge** | 1 bp | 2 bps | 5 bps |
+| Asset category | Jumper fee |
+| --- | --: |
+| Stable | **0 bps (0%)** |
+| Major | **2 bps (0.02%)** |
+| Other | **5 bps (0.05%)** |
 
-### Asset categories
+### Bridge
 
-**Stable**<br />Transactions between supported stable assets.
+| Asset category | Jumper fee |
+| --- | --: |
+| Stable | **1 bp (0.01%)** |
+| Major | **2 bps (0.02%)** |
+| Other | **5 bps (0.05%)** |
 
-**Major**<br />Major-to-major and stable-to-major transactions.
-
-**Other**<br />Other-to-other, other-to-major and other-to-stable transactions.
-
-For example:
-
-- **2 bps = 0.02%**
-- **5 bps = 0.05%**
-
-<Note>
-  These are Jumper fees. Network gas costs and fees charged by underlying bridges, DEXs or other providers may also apply. Review the complete route and expected output before confirming a transaction.
-</Note>
+For a complete breakdown of Jumper fees, see [Fees](/jumper-fees).
 
 ## Connection to other products
 

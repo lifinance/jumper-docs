@@ -1,0 +1,170 @@
+---
+title: "Jumper Fees"
+description: "A complete breakdown of Jumper fees across swaps, bridges, RWA and other Jumper products."
+---
+
+Jumper is designed to make moving and trading assets across chains efficient — including the fees you pay to use it.
+
+The Jumper fee depends on the product you're using and, for standard swaps and bridges, the type of assets involved.
+
+This page covers the fees charged by **Jumper itself**. Network gas, price impact and fees charged by underlying bridges, DEXs, issuers or other providers may also apply depending on the transaction.
+
+<Note>
+  Jumper always shows your route and expected output before you confirm a transaction. Where applicable, additional network and provider costs are included in the transaction details.
+</Note>
+
+## Jumper fees at a glance
+
+| Product | Jumper fee |
+| --- | --: |
+| Main — Stable swap | **0 bps (0%)** |
+| Main — Major swap | **2 bps (0.02%)** |
+| Main — Other swap | **5 bps (0.05%)** |
+| Main — Stable bridge | **1 bp (0.01%)** |
+| Main — Major bridge | **2 bps (0.02%)** |
+| Main — Other bridge | **5 bps (0.05%)** |
+| Advanced | **0 bps (0%)** |
+| RWA | **5 bps (0.05%)** |
+
+## Understanding basis points
+
+Jumper fees are displayed in **basis points (bps)**.
+
+A basis point is one hundredth of a percentage point:
+
+- **1 bp = 0.01%**
+- **2 bps = 0.02%**
+- **5 bps = 0.05%**
+- **25 bps = 0.25%**
+- **85 bps = 0.85%**
+
+For example, a 5 bps Jumper fee on a \$1,000 trade is **\$0.50**.
+
+## Main Swap fees
+
+Fees on standard Jumper swaps depend on the assets being traded.
+
+| Asset category | Jumper fee |
+| --- | --: |
+| Stable | **0 bps (0%)** |
+| Major | **2 bps (0.02%)** |
+| Other | **5 bps (0.05%)** |
+
+### Stable
+
+Stable-to-stable swaps have a **0 bps Jumper fee**.
+
+### Major
+
+Major-to-major and stable-to-major swaps have a **2 bps (0.02%) Jumper fee**.
+
+### Other
+
+Other-to-other, other-to-major and other-to-stable swaps have a **5 bps (0.05%) Jumper fee**.
+
+## Main Bridge fees
+
+Fees on standard Jumper bridge transactions also depend on the assets involved.
+
+| Asset category | Jumper fee |
+| --- | --: |
+| Stable | **1 bp (0.01%)** |
+| Major | **2 bps (0.02%)** |
+| Other | **5 bps (0.05%)** |
+
+These are Jumper's fees for using the route. The underlying bridge or network may introduce additional costs, which can vary depending on the route and current network conditions.
+
+## RWA fees
+
+Jumper charges a flat **5 bps (0.05%) fee on all trades made through Jumper RWA**.
+
+The same Jumper fee applies across supported RWA assets and routes.
+
+Other costs may apply depending on the tokenized asset, issuer, network and underlying route.
+
+## Perps fees
+
+{{PERPS_FEE_SECTION}}
+
+## How Jumper fees compare
+
+For context, here is how Jumper's standard swap fee compares with the published in-app swap fees of several popular crypto wallets.
+
+| Platform | Standard swap/platform fee |
+| --- | --: |
+| **Jumper** | **0–5 bps (0–0.05%)** |
+| Rabby Wallet | 25 bps (0.25%)\* |
+| Phantom | 85 bps (0.85%)\* |
+| MetaMask | 87.5 bps (0.875%) |
+
+<Note>
+  This comparison covers the fee charged by the platform for its built-in swap functionality. It does not compare live execution quotes, gas, price impact, liquidity or third-party provider fees, all of which can affect the final amount received.
+
+  Competitor fees were checked in September 2026 and may change. Some platforms also waive their standard fee for certain assets or transaction types.
+</Note>
+
+### What does that mean in practice?
+
+Using the platform fee alone, here's what a \$1,000 swap can cost:
+
+| Platform | Fee on a \$1,000 swap |
+| --- | --: |
+| **Jumper — Stable** | **\$0.00** |
+| **Jumper — Major** | **\$0.20** |
+| **Jumper — Other** | **\$0.50** |
+| Rabby Wallet | \$2.50\* |
+| Phantom | \$8.50\* |
+| MetaMask | \$8.75 |
+
+On a \$10,000 swap:
+
+| Platform | Fee on a \$10,000 swap |
+| --- | --: |
+| **Jumper — Stable** | **\$0.00** |
+| **Jumper — Major** | **\$2.00** |
+| **Jumper — Other** | **\$5.00** |
+| Rabby Wallet | \$25.00\* |
+| Phantom | \$85.00\* |
+| MetaMask | \$87.50 |
+
+\*Rabby and Phantom have fee exemptions for certain transaction types and asset pairs. Figures above use their published standard swap fees.
+
+These examples compare platform fees only. The route producing the best final outcome can also depend on available liquidity, price impact, gas and other execution costs.
+
+## Other costs you may see
+
+The Jumper fee is only one component of the total cost of an onchain transaction.
+
+Depending on your route, you may also see:
+
+### Network fees
+
+Blockchain transactions require gas to be processed by the network.
+
+Network fees vary by chain and current demand and are paid to the network rather than Jumper.
+
+### Bridge and provider fees
+
+Some bridges, DEXs, liquidity providers or other protocols used in a route may charge their own fees.
+
+These depend on the provider and route selected.
+
+### Price impact
+
+A trade can move the market price, particularly when trading a large amount or an asset with limited liquidity.
+
+Price impact is not a Jumper fee. It reflects the available liquidity for the trade.
+
+### Slippage
+
+The market price can change between requesting a quote and executing a transaction.
+
+Slippage tolerance determines how much movement you are willing to accept before the transaction fails. Slippage is not a fee charged by Jumper.
+
+## Check before you sign
+
+Jumper searches across available routes and providers to find an efficient path for your transaction.
+
+Before confirming, review the route, expected output and transaction details shown in Jumper.
+
+That way, you're comparing the actual outcome of the transaction — not just one fee in isolation.

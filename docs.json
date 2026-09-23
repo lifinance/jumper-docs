@@ -50,7 +50,9 @@
           },
           {
             "group": "Jumper RWA",
-            "pages": []
+            "pages": [
+              "jumper-rwa"
+            ]
           },
           {
             "group": "Jumper Portfolio",
@@ -93,6 +95,12 @@
               "resources/bitcoin-providers",
               "resources/solana-providers",
               "resources/evm-providers"
+            ]
+          },
+          {
+            "group": "Fees",
+            "pages": [
+              "jumper-fees"
             ]
           },
           {
