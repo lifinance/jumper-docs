@@ -78,6 +78,34 @@ Landing on a new chain with no native gas? Gas Top Up adds a small amount of the
 
 The review screen shows all costs alongside the estimated output, time, known fees, and expected gas before you confirm.
 
+## Jumper fees
+
+Jumper charges a small fee on standard swaps and bridges. The fee depends on the type of assets involved in the transaction.
+
+Fees are measured in **basis points (bps)**.<br />**1 bp = 0.01%.**
+
+| Transaction | Stable | Major | Other |
+| --- | --: | --: | --: |
+| **Swap** | 0 bps | 2 bps | 5 bps |
+| **Bridge** | 1 bp | 2 bps | 5 bps |
+
+### Asset categories
+
+**Stable**<br />Transactions between supported stable assets.
+
+**Major**<br />Major-to-major and stable-to-major transactions.
+
+**Other**<br />Other-to-other, other-to-major and other-to-stable transactions.
+
+For example:
+
+- **2 bps = 0.02%**
+- **5 bps = 0.05%**
+
+<Note>
+  These are Jumper fees. Network gas costs and fees charged by underlying bridges, DEXs or other providers may also apply. Review the complete route and expected output before confirming a transaction.
+</Note>
+
 ## Connection to other products
 
 Swap and Bridge move capital. Your capital can flow into Earn positions and is tracked in Portfolio. Swap activity earns XP toward your Jumper Pass.

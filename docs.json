@@ -49,6 +49,10 @@
             ]
           },
           {
+            "group": "Jumper RWA",
+            "pages": []
+          },
+          {
             "group": "Jumper Portfolio",
             "pages": [
               "products/jumper-portfolio",
