@@ -43,6 +43,12 @@
             ]
           },
           {
+            "group": "Jumper Perps",
+            "pages": [
+              "jumper-perps-2"
+            ]
+          },
+          {
             "group": "Jumper Earn",
             "pages": [
               "products/jumper-earn"
