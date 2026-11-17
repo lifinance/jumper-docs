@@ -29,9 +29,10 @@ There is no package.json, build step, test suite, or env file. Pushing to `main`
 
 ## Conventions
 
-- A new page only appears in the site once its path (without `.mdx`) is added to a group in
-  `docs.json` navigation. Removing or renaming a page means updating `docs.json` too.
-- Every page starts with frontmatter: `title`, `description`, and optionally `icon`.
+- A new page only appears in the site navigation once its path (without `.mdx`) is added to a group in
+  `docs.json`. Unlisted pages stay reachable by URL and search. Removing or renaming a page means updating `docs.json` too.
+- Give new pages frontmatter with `title`, `description`, and optionally `icon` (a few existing pages
+  lack `description`).
 - Prefer the Mintlify components the existing pages use (`<Frame>` around screenshots, `<Accordion>`,
   `<Card>`, `<Note>`, `<Steps>`) over raw HTML.
 - Audience is Jumper end users, not integrators: plain language, no internal service names.
