@@ -3,7 +3,7 @@ title: 'Introduction'
 description: 'Programmatic access to Jumper routing, transfers, and status'
 ---
 
-The Jumper API gives you full control over cross-chain routing. Use it to fetch the best path, build the transaction payload, and monitor settlement with a single integration.
+The Jumper pipeline API is LI.FI-compatible. Use it to fetch a quote (with a ready-to-sign transaction), broadcast it, and track settlement.
 
 <Card
   title="OpenAPI specification"
@@ -16,41 +16,61 @@ The Jumper API gives you full control over cross-chain routing. Use it to fetch 
 ## Base URL
 
 ```
-https://api.jumper.xyz
+https://api.jumper.xyz/pipeline/v1
 ```
+
+Paths in the OpenAPI spec are relative to that base (e.g. `GET /quote` → `https://api.jumper.xyz/pipeline/v1/quote`).
 
 ## Authentication
 
-Send your API key with every request.
+An API key raises rate limits. Send it on every request when you have one:
 
 ```http
 x-api-key: YOUR_API_KEY
 ```
 
-Use distinct keys per environment and rotate them regularly. Requests without a key are rate limited.
+Also send your integrator on both the query string and header (Jumper app uses `jumper.exchange`):
+
+```http
+x-lifi-integrator: jumper.exchange
+```
 
 ## Core workflow
 
-1. **Quote:** call `/v1/quote` with source/destination chain, token, and amount.
-2. **Transfer:** pass the `routeId` to `/v1/transfer` to receive a transaction payload.
-3. **Broadcast:** send the transaction with your signer or relayer.
-4. **Track:** poll `/v1/status/{transferId}` or subscribe to the status webhook to keep users informed.
+1. **Quote:** `GET /quote` with `fromChain`, `toChain`, `fromToken`, `toToken`, `fromAmount`, `fromAddress`, and `integrator=jumper.exchange`.
+2. **Broadcast:** sign and send `transactionRequest` from the quote response (no separate transfer endpoint for this flow).
+3. **Track:** `GET /status?txHash=…&fromChain=…&toChain=…` (optional `bridge` = quote `tool`).
+
+### Example quote
+
+```bash
+curl --url 'https://api.jumper.xyz/pipeline/v1/quote?fromAddress=0xcD82e0De2bB7c310D2800c400a82295785923618&fromAmount=1000000&fromChain=42161&fromToken=0xaf88d065e77c8cC2239327C5EDb3A432268e5831&toChain=42161&toToken=0x0000000000000000000000000000000000000000&order=CHEAPEST&integrator=jumper.exchange' \
+  -H 'accept: */*' \
+  -H 'origin: https://jumper.xyz' \
+  -H 'referer: https://jumper.xyz/' \
+  -H 'x-lifi-integrator: jumper.exchange'
+```
 
 ## Rate limits
 
 - Quotes: optimized for real-time UX; cache identical requests where possible.
-- Transfers: signed requests are enforced; replay protection is applied to route IDs.
-- Status: prefer webhooks; poll with exponential backoff if webhooks are unavailable.
+- Status: poll with exponential backoff.
 
 ## Errors
 
-Errors follow a consistent structure:
+Error bodies vary by gateway layer. Common shapes:
 
 ```json
 {
-  "error": "ROUTE_UNAVAILABLE",
-  "message": "No route found within your constraints"
+  "error": "Rate limited. Please reach out to the team for assistance."
 }
 ```
 
-Handle `429` by backing off and reusing cached quotes. For `400` errors, surface the message to users with remediation guidance (e.g., widen slippage or pick another bridge).
+```json
+{
+  "message": "No available quotes for the requested transfer",
+  "code": 1002
+}
+```
+
+Handle `429` by backing off and reusing cached quotes. For `400` errors, surface the message to users (e.g. widen slippage or pick another route).
