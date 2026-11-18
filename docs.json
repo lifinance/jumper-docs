@@ -132,7 +132,7 @@
       "anchors": [
         {
           "anchor": "Jumper app",
-          "href": "https://jumper.exchange",
+          "href": "https://jumper.xyz",
           "icon": "arrow-up-right"
         },
         {
@@ -151,13 +151,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@jumper.exchange"
+        "href": "mailto:support@jumper.xyz"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Launch Jumper",
-      "href": "https://jumper.exchange"
+      "href": "https://jumper.xyz"
     }
   },
   "contextual": {
