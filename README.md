@@ -15,7 +15,7 @@ Then open `http://localhost:3000`.
 
 ## Structure
 
-- Guides (`index.mdx`, `quickstart.mdx`, `development.mdx`)
+- Guides (`index.mdx`, `quickstart.mdx`, `using-jumper-safely.mdx`)
 - Brand assets in `logo/` and `favicon.svg`
 
 ## Deployment
