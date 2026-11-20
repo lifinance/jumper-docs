@@ -1,6 +1,6 @@
 # Jumper Docs
 
-User-facing documentation for Jumper (jumper.exchange), built with [Mintlify](https://mintlify.com/).
+User-facing documentation for Jumper (jumper.xyz), built with [Mintlify](https://mintlify.com/).
 Pages are MDX; `docs.json` defines the site config and navigation. Most commits come from the Mintlify
 web editor (`mintlify[bot]`), so expect edits to land here from outside git as well.
 
@@ -36,7 +36,7 @@ There is no package.json, build step, test suite, or env file. Pushing to `main`
 - Prefer the Mintlify components the existing pages use (`<Frame>` around screenshots, `<Accordion>`,
   `<Card>`, `<Note>`, `<Steps>`) over raw HTML.
 - Audience is Jumper end users, not integrators: plain language, no internal service names.
-- Support contact used across the site: `support@jumper.exchange`.
+- Support contact used across the site: `support@jumper.xyz`.
 
 ## Ownership
 
