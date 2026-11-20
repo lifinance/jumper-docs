@@ -23,7 +23,7 @@
           {
             "group": "Product Guide",
             "pages": [
-              "development",
+              "using-jumper-safely",
               "why-jumper",
               "faq"
             ]
@@ -179,5 +179,11 @@
       "discord": "https://discord.gg/jumperexchange"
     },
     "poweredByMintlify": false
-  }
+  },
+  "redirects": [
+    {
+      "source": "/development",
+      "destination": "/using-jumper-safely"
+    }
+  ]
 }
