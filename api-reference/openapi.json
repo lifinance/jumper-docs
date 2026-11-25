@@ -2,12 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Jumper API",
-    "description": "Programmatic access to Jumper quotes, transfers, and status tracking.",
+    "description": "LI.FI-compatible routing through Jumper's pipeline. Base path is `/pipeline/v1` on `api.jumper.xyz`. A successful `GET /quote` already returns a signable `transactionRequest`.",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://api.jumper.exchange"
+      "url": "https://api.jumper.xyz/pipeline/v1",
+      "description": "Jumper production pipeline (LI.FI-compatible)"
     }
   ],
   "security": [
@@ -16,79 +17,129 @@
     }
   ],
   "paths": {
-    "/v1/quote": {
+    "/quote": {
       "get": {
-        "summary": "Get best cross-chain quote",
-        "description": "Returns the best route for the requested token amount across supported bridges and DEXs.",
+        "summary": "Get best quote",
+        "description": "Returns the best swap/bridge step for the requested amount. Response includes `transactionRequest` ready to sign and broadcast. Use integrator `jumper.exchange` (or your assigned integrator) and send the same value in `x-lifi-integrator`.",
         "parameters": [
           {
-            "name": "fromChainId",
+            "name": "fromChain",
             "in": "query",
             "required": true,
-            "description": "EVM chain ID of the source chain.",
+            "description": "Source chain ID (e.g. `42161` for Arbitrum).",
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "format": "int64",
+              "example": 42161
             }
           },
           {
-            "name": "toChainId",
+            "name": "toChain",
             "in": "query",
             "required": true,
-            "description": "EVM chain ID of the destination chain.",
+            "description": "Destination chain ID.",
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "format": "int64",
+              "example": 42161
             }
           },
           {
-            "name": "fromTokenAddress",
+            "name": "fromToken",
             "in": "query",
             "required": true,
-            "description": "Token contract on the source chain. Use the native placeholder address for native assets.",
+            "description": "Source token address. Use `0x0000000000000000000000000000000000000000` for the native asset.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
             }
           },
           {
-            "name": "toTokenAddress",
+            "name": "toToken",
             "in": "query",
             "required": true,
-            "description": "Token contract on the destination chain. Use the native placeholder address for native assets.",
+            "description": "Destination token address. Use `0x0000000000000000000000000000000000000000` for the native asset.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "0x0000000000000000000000000000000000000000"
             }
           },
           {
             "name": "fromAmount",
             "in": "query",
             "required": true,
-            "description": "Amount to swap in the smallest unit (wei).",
+            "description": "Amount in the smallest unit of `fromToken` (e.g. USDC 6 decimals: `1000000` = 1 USDC).",
+            "schema": {
+              "type": "string",
+              "example": "1000000"
+            }
+          },
+          {
+            "name": "fromAddress",
+            "in": "query",
+            "required": true,
+            "description": "Sender wallet that will sign and broadcast the transaction.",
+            "schema": {
+              "type": "string",
+              "example": "0xcD82e0De2bB7c310D2800c400a82295785923618"
+            }
+          },
+          {
+            "name": "toAddress",
+            "in": "query",
+            "required": false,
+            "description": "Recipient address. Defaults to `fromAddress` when omitted.",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "description": "Route preference.",
+            "schema": {
+              "type": "string",
+              "enum": ["CHEAPEST", "FASTEST", "SAFEST"],
+              "default": "CHEAPEST",
+              "example": "CHEAPEST"
             }
           },
           {
             "name": "slippage",
             "in": "query",
-            "description": "Maximum allowed slippage (e.g., 0.005 for 0.5%).",
+            "required": false,
+            "description": "Max slippage as a fraction (e.g. `0.005` = 0.5%).",
             "schema": {
               "type": "number",
-              "format": "double"
+              "format": "double",
+              "example": 0.005
             }
           },
           {
             "name": "integrator",
             "in": "query",
-            "description": "Identifier for your integration to segment analytics and rate limits.",
+            "required": false,
+            "description": "Integrator id for analytics and fee attribution. Jumper app uses `jumper.exchange`.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "jumper.exchange"
+            }
+          },
+          {
+            "name": "x-lifi-integrator",
+            "in": "header",
+            "required": false,
+            "description": "Same integrator id as the `integrator` query param.",
+            "schema": {
+              "type": "string",
+              "example": "jumper.exchange"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Quote response",
+            "description": "Quote step including a signable transaction",
             "content": {
               "application/json": {
                 "schema": {
@@ -98,7 +149,17 @@
             }
           },
           "400": {
-            "description": "Invalid input or unsupported route",
+            "description": "Invalid input or no route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown path (wrong base URL — use `/pipeline/v1`)",
             "content": {
               "application/json": {
                 "schema": {
@@ -120,56 +181,56 @@
         }
       }
     },
-    "/v1/transfer": {
-      "post": {
-        "summary": "Create transfer payload",
-        "description": "Returns the transaction data needed to execute the selected route.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TransferRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Transfer payload created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransferResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid route or request body",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/status/{transferId}": {
+    "/status": {
       "get": {
         "summary": "Get transfer status",
-        "description": "Returns the latest state of a transfer for tracking and user notifications.",
+        "description": "Track a broadcast transfer by source transaction hash. LI.FI-compatible status query.",
         "parameters": [
           {
-            "name": "transferId",
-            "in": "path",
+            "name": "txHash",
+            "in": "query",
             "required": true,
-            "description": "ID returned by the transfer endpoint.",
+            "description": "Source-chain transaction hash from the broadcast of `transactionRequest`.",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "fromChain",
+            "in": "query",
+            "required": true,
+            "description": "Source chain ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "toChain",
+            "in": "query",
+            "required": true,
+            "description": "Destination chain ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "bridge",
+            "in": "query",
+            "required": false,
+            "description": "Bridge/DEX tool from the quote (`tool` field), when known.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrator",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "jumper.exchange"
             }
           }
         ],
@@ -193,29 +254,16 @@
                 }
               }
             }
-          }
-        }
-      }
-    }
-  },
-  "webhooks": {
-    "/v1/webhooks/transfer-status": {
-      "post": {
-        "summary": "Transfer status webhook",
-        "description": "Receive asynchronous updates when a transfer state changes.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StatusResponse"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Acknowledged"
           }
         }
       }
@@ -226,172 +274,205 @@
       "Token": {
         "type": "object",
         "properties": {
+          "address": {
+            "type": "string"
+          },
           "chainId": {
             "type": "integer",
             "format": "int64"
-          },
-          "address": {
-            "type": "string"
           },
           "symbol": {
             "type": "string"
           },
           "decimals": {
             "type": "integer"
-          }
-        }
-      },
-      "QuoteResponse": {
-        "type": "object",
-        "properties": {
-          "routeId": {
-            "type": "string",
-            "description": "Identifier to be used when creating the transfer."
           },
-          "fromAmount": {
-            "type": "string",
-            "description": "Input amount in smallest unit."
-          },
-          "toAmountMin": {
-            "type": "string",
-            "description": "Minimum output after slippage and fees."
-          },
-          "estimatedDuration": {
-            "type": "integer",
-            "description": "Estimated time to finality in seconds."
-          },
-          "bridge": {
+          "name": {
             "type": "string"
           },
-          "exchange": {
+          "priceUSD": {
             "type": "string"
           },
-          "gasUSD": {
-            "type": "number",
-            "format": "double",
-            "description": "Estimated gas cost in USD."
+          "logoURI": {
+            "type": "string"
           }
         },
-        "required": [
-          "routeId",
-          "fromAmount",
-          "toAmountMin",
-          "estimatedDuration"
-        ]
+        "required": ["address", "chainId", "symbol", "decimals"]
       },
-      "TransferRequest": {
+      "TransactionRequest": {
         "type": "object",
-        "required": [
-          "routeId",
-          "userAddress"
-        ],
+        "description": "EVM transaction payload to sign and broadcast.",
         "properties": {
-          "routeId": {
-            "type": "string",
-            "description": "Route identifier from the quote response."
+          "to": {
+            "type": "string"
           },
-          "userAddress": {
-            "type": "string",
-            "description": "Sender address that will sign and broadcast the transaction."
+          "from": {
+            "type": "string"
           },
-          "integrator": {
-            "type": "string",
-            "description": "Optional tag for analytics and fee attribution."
+          "data": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "chainId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "gasLimit": {
+            "type": "string"
+          },
+          "gasPrice": {
+            "type": "string"
+          }
+        },
+        "required": ["to", "data", "value", "chainId"]
+      },
+      "QuoteAction": {
+        "type": "object",
+        "properties": {
+          "fromChainId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "toChainId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "fromAmount": {
+            "type": "string"
+          },
+          "fromAddress": {
+            "type": "string"
+          },
+          "toAddress": {
+            "type": "string"
           },
           "slippage": {
             "type": "number",
-            "format": "double",
-            "description": "Override slippage for this transfer."
+            "format": "double"
+          },
+          "fromToken": {
+            "$ref": "#/components/schemas/Token"
+          },
+          "toToken": {
+            "$ref": "#/components/schemas/Token"
           }
-        }
+        },
+        "required": [
+          "fromChainId",
+          "toChainId",
+          "fromAmount",
+          "fromToken",
+          "toToken"
+        ]
       },
-      "TransferResponse": {
+      "QuoteEstimate": {
         "type": "object",
         "properties": {
-          "transferId": {
+          "tool": {
+            "type": "string"
+          },
+          "fromAmount": {
+            "type": "string"
+          },
+          "toAmount": {
+            "type": "string"
+          },
+          "toAmountMin": {
+            "type": "string"
+          },
+          "approvalAddress": {
+            "type": "string"
+          },
+          "executionDuration": {
+            "type": "integer",
+            "description": "Estimated seconds to completion."
+          },
+          "fromAmountUSD": {
+            "type": "string"
+          },
+          "toAmountUSD": {
+            "type": "string"
+          }
+        },
+        "required": ["fromAmount", "toAmount", "toAmountMin"]
+      },
+      "QuoteResponse": {
+        "type": "object",
+        "description": "LI.FI step returned by Jumper pipeline quote.",
+        "properties": {
+          "type": {
             "type": "string",
-            "description": "Identifier to use when checking status."
+            "example": "lifi"
           },
-          "transaction": {
-            "type": "object",
-            "properties": {
-              "to": {
-                "type": "string"
-              },
-              "data": {
-                "type": "string"
-              },
-              "value": {
-                "type": "string"
-              },
-              "chainId": {
-                "type": "integer",
-                "format": "int64"
-              },
-              "gasLimit": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "to",
-              "data",
-              "value",
-              "chainId"
-            ]
+          "id": {
+            "type": "string",
+            "description": "Quote/step id."
           },
-          "approvals": {
+          "tool": {
+            "type": "string",
+            "description": "Bridge or DEX that will execute the step.",
+            "example": "sushiswap"
+          },
+          "integrator": {
+            "type": "string",
+            "example": "jumper.exchange"
+          },
+          "action": {
+            "$ref": "#/components/schemas/QuoteAction"
+          },
+          "estimate": {
+            "$ref": "#/components/schemas/QuoteEstimate"
+          },
+          "transactionRequest": {
+            "$ref": "#/components/schemas/TransactionRequest"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "includedSteps": {
             "type": "array",
             "items": {
               "type": "object",
-              "properties": {
-                "token": {
-                  "$ref": "#/components/schemas/Token"
-                },
-                "spender": {
-                  "type": "string"
-                },
-                "amount": {
-                  "type": "string"
-                }
-              }
+              "additionalProperties": true
             }
           }
         },
         "required": [
-          "transferId",
-          "transaction"
+          "id",
+          "tool",
+          "action",
+          "estimate",
+          "transactionRequest"
         ]
       },
       "StatusResponse": {
         "type": "object",
         "properties": {
-          "transferId": {
-            "type": "string"
-          },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "in_progress",
-              "completed",
-              "failed"
-            ]
+            "enum": ["NOT_FOUND", "INVALID", "PENDING", "DONE", "FAILED"]
           },
-          "txHash": {
+          "substatus": {
             "type": "string"
           },
-          "message": {
+          "sending": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "receiving": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "tool": {
             "type": "string"
           },
-          "toAmount": {
-            "type": "string",
-            "description": "Final amount delivered in the smallest unit."
+          "transactionId": {
+            "type": "string"
           }
         },
-        "required": [
-          "transferId",
-          "status"
-        ]
+        "required": ["status"]
       },
       "Error": {
         "type": "object",
@@ -401,19 +482,19 @@
           },
           "message": {
             "type": "string"
+          },
+          "code": {
+            "type": ["integer", "string"]
           }
-        },
-        "required": [
-          "error",
-          "message"
-        ]
+        }
       }
     },
     "securitySchemes": {
       "ApiKeyAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "x-api-key"
+        "name": "x-api-key",
+        "description": "Optional. Requests without a key are more aggressively rate limited."
       }
     }
   }

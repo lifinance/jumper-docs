@@ -24,4 +24,4 @@ Push changes to the default branch to deploy. Keep `docs.json` in the repo root 
 
 ## Support
 
-Reach the team at `support@jumper.exchange` for access keys, rate limits, or integration questions.
+Reach the team at `support@jumper.xyz` for access keys, rate limits, or integration questions.
